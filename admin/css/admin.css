@@ -1,0 +1,14 @@
+/* LogStore admin styles */
+
+body #adminmenu #toplevel_page_logstore div.wp-menu-image {
+    background: url('../images/menu.png') no-repeat 0 -32px;
+}
+
+body #adminmenu #toplevel_page_logstore:hover div.wp-menu-image,
+body #adminmenu #toplevel_page_logstore.wp-has-current-submenu div.wp-menu-image {
+    background-position: 0 0;
+}
+
+body #adminmenu #toplevel_page_logstore div.wp-menu-image a img {
+    display: none;
+}
