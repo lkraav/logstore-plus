@@ -46,6 +46,9 @@ None, yet.
 
 == Upgrade Notice ==
 
+= 0.1.2 =
+LogStore moved to the right repository, so your auto updates should work now.
+
 = 0.1 =
 Initial Release.
 
