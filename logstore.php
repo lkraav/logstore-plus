@@ -348,6 +348,61 @@ if (!class_exists('LogStore')) {
 			return $i;
 		}
 
+        function xml_highlight($s) {
+            $s = htmlspecialchars($s, ENT_COMPAT | ENT_HTML401, "UTF-8" , false);
+            $s = preg_replace("#&lt;([/]*?)(.*)([\s]*?)&gt;#sU",
+                    "<font color=\"#0000FF\">&lt;\\1\\2\\3&gt;</font>",$s);
+            $s = preg_replace("#&lt;([\?])(.*)([\?])&gt;#sU",
+                    "<font color=\"#800000\">&lt;\\1\\2\\3&gt;</font>",$s);
+            $s = preg_replace("#&lt;([^\s\?/=])(.*)([\[\s/]|&gt;)#iU",
+                    "&lt;<font color=\"#808000\">\\1\\2</font>\\3",$s);
+            $s = preg_replace("#&lt;([/])([^\s]*?)([\s\]]*?)&gt;#iU",
+                    "&lt;\\1<font color=\"#808000\">\\2</font>\\3&gt;",$s);
+            $s = preg_replace("#([^\s]*?)\=(&quot;|')(.*)(&quot;|')#isU",
+                    "<font color=\"#800080\">\\1</font>=<font color=\"#FF00FF\">\\2\\3\\4</font>",$s);
+            $s = preg_replace("#&lt;(.*)(\[)(.*)(\])&gt;#isU",
+                    "&lt;\\1<font color=\"#800080\">\\2\\3\\4</font>&gt;",$s);
+            return nl2br($s);
+        }
+
+        function xml_indent($xml) {
+            // add marker linefeeds to aid the pretty-tokeniser (adds a linefeed between all tag-end boundaries)
+            $xml = preg_replace('/(>)(<)(\/*)/', "$1\n$2$3", $xml);
+
+            // now indent the tags
+            $token      = strtok($xml, "\n");
+            $result     = ''; // holds formatted version as it is built
+            $pad        = 0; // initial indent
+            $matches    = array(); // returns from preg_matches()
+
+            // scan each line and adjust indent based on opening/closing tags
+            while ($token !== false) :
+            // test for the various tag states
+            // 1. open and closing tags on same line - no change
+                if (preg_match('/.+<\/\w[^>]*>$/', $token, $matches)) :
+                    $indent=0;
+                    // 2. closing tag - outdent now
+                elseif (preg_match('/^<\/\w/', $token, $matches)) :
+                    $pad--;
+                    // 3. opening tag - don't pad this one, only subsequent tags
+                elseif (preg_match('/^<\w[^>]*[^\/]>.*$/', $token, $matches)) :
+                    $indent=1;
+                    // 4. no indentation needed
+                else :
+                    $indent = 0;
+                endif;
+
+                // pad the line with the required number of leading spaces
+                $line    = str_pad($token, strlen($token)+$pad, ' ', STR_PAD_LEFT);
+                $result .= $line . "\n"; // add to the cumulative result, with linefeed
+                $token   = strtok("\n"); // get the next token
+                $pad    += $indent; // update the pad size for subsequent lines
+            endwhile;
+
+            return $result;
+        }
+
+
 		function format_data($data) {
 			if (is_serialized($data)) {
 				$data = unserialize($data);
@@ -359,12 +414,18 @@ if (!class_exists('LogStore')) {
 					$alt = (++$i % 2 == 1) ? "class=\"alternate\"" : "";
 					if (is_array($v)) $v = $this->format_data($v);
 					$output .= "<dt ".$alt.">".$k.":<dt>";
-					$output .= "<dd ".$alt.">".$v."<dd>";
+                    if (!empty($v))
+                        $v = strpos($v, "?xml") ? $this->xml_highlight($this->xml_indent($v)) : $v;
+
+                    $output .= "<dd ".$alt.">".($v ? $v : "&nbsp;")."<dd>";
 				}
 				$output .= "</dl>";
 				return $output;
 			} else {
-				return "<div class=\"logdata\">".esc_html($data)."</div>";
+                if (strpos($data, "?xml"))
+                    $data = $this->xml_highlight($this->xml_indent($data));
+
+				return "<div class=\"logdata\">".$data."</div>";
 			}
 		}
 
