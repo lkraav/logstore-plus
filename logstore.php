@@ -254,7 +254,7 @@ if (!class_exists('LogStore')) {
 			global $wpdb;
 
 			$time = current_time('mysql');
-			$values = apply_filters('logstore_new_entry-'.$this->_name, compact($time, $message, $data, $tag, $status));
+			$values = apply_filters('logstore_new_entry-'.$this->_name, compact("time", "message", "data", "tag", "status"));
 			$values['data'] = maybe_serialize($values['data']);
 			$values['logger'] = $this->_name;
 
