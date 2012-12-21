@@ -1,12 +1,13 @@
 <?php
 /*
-Plugin Name: LogStore
+Plugin Name: LogStore Plus
 Description: LogStore is a 'meta' plugin that allows other plugins to log data easily
-Author: Andre Wyrwa <andre@wyrfel.com>
-Version: 0.1.2
+Author: Andre Wyrwa <andre@wyrfel.com>, Team Markitekt <leho@markitekt.ee>
+Version: 0.1.3
 */
 
-/*  Copyright 2010  Andre Wyrwa (email : andre@wyrfel.com)
+/*
+Copyright 2010  Andre Wyrwa (email : andre@wyrfel.com)
 */
 
 global $wp_version;
