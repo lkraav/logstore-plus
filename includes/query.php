@@ -157,7 +157,7 @@ class LogStore_Query {
 
 			if (!empty($qv['status'])) $this->query_where .= " AND ".$this->_table.".status = '".trim($qv['status'])."'";
 
-			if (!isset($qv['range'])) $qv['range'] = array(date("Y-m-d h:i:s", current_time('timestamp')-86400*5));
+			if (!isset($qv['range'])) $qv['range'][1] = array(date("Y-m-d h:i:s", current_time('timestamp')-86400*5));
 			if (!empty($qv['range'][1])) $this->query_where .= " AND ".$this->_table.".time <= '".$qv['range'][1]."'";
 			if (!empty($qv['range'][0])) $this->query_where .= " AND ".$this->_table.".time >= '".$qv['range'][0]."'";
 
