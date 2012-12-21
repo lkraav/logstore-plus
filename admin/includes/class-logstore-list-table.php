@@ -16,7 +16,7 @@ class LogStore_List_Table extends WP_List_Table {
 		$this->_p = $parent;
 		$this->_uri = $this->_p->get_admin_page_uri();
 
-		parent::WP_List_Table( array(
+		parent::__construct( array(
 			'plural' => 'logs',
 			'singular' => 'log',
 			'ajax' => false,
