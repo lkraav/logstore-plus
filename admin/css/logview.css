@@ -12,24 +12,26 @@ dl.logdata {
     padding: 3px 3px 1px 3px;
 	background-color: #FFFFFF;
     border: 1px solid #DFDFDF;
+    overflow: hidden;
+    width: 100%;
 }
 
-dl.logdata dl {
+dl.logdata * {
 	border: none;
 	padding: 0;
 	margin: 0;
 }
 
 dl.logdata dt {
-	float: left; display: inline;
-	width: 90px;
-	line-height: normal;
-	color: #888;
+    clear: left;
+    float: left;
+    font-weight: bold;
+    width: 30%;
 }
 
 dl.logdata dd {
-	padding: 0 0 0 100px;
-	margin: 0 0 2px 0;
+    padding-left: 30%;
+    width: 70%;
 }
 
 div.logdata {
